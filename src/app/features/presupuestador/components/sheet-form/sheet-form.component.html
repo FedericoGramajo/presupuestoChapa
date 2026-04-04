@@ -1,0 +1,51 @@
+<section class="card">
+    <h2 class="card__title clickable" (click)="expanded.set(!expanded())" style="cursor: pointer; user-select: none;">
+        <mat-icon class="card__icon">straighten</mat-icon> <span>Chapa sin trabajar</span>
+        <div style="flex: 1; height: 1px; background: var(--border);"></div>
+        <mat-icon class="card__icon">{{ expanded() ? 'expand_less' : 'expand_more' }}</mat-icon>
+    </h2>
+    @if (expanded()) {
+    <form [formGroup]="form" class="card__body">
+        <div class="field-row">
+            <mat-form-field appearance="outline" class="field-row__item">
+                <mat-label>Ancho (m)</mat-label>
+                <input matInput type="number" formControlName="width" step="0.05" id="sheet-width" />
+                <div matSuffix class="custom-spinners">
+                    <mat-icon (click)="mod('width', 0.1)">arrow_drop_up</mat-icon>
+                    <mat-icon (click)="mod('width', -0.1)">arrow_drop_down</mat-icon>
+                </div>
+                @if (form.controls.width.touched && form.controls.width.hasError('required')) {
+                <mat-error>Requerido</mat-error>
+                }
+                @if (form.controls.width.touched && form.controls.width.hasError('min')) {
+                <mat-error>Mín. 0.1 m</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-row__item">
+                <mat-label>Alto (m)</mat-label>
+                <input matInput type="number" formControlName="height" step="0.05" id="sheet-height" />
+                <div matSuffix class="custom-spinners">
+                    <mat-icon (click)="mod('height', 0.1)">arrow_drop_up</mat-icon>
+                    <mat-icon (click)="mod('height', -0.1)">arrow_drop_down</mat-icon>
+                </div>
+                @if (form.controls.height.touched && form.controls.height.hasError('required')) {
+                <mat-error>Requerido</mat-error>
+                }
+                @if (form.controls.height.touched && form.controls.height.hasError('min')) {
+                <mat-error>Mín. 0.1 m</mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Precio total de chapa ($)</mat-label>
+            <span matTextPrefix>$&nbsp;</span>
+            <input matInput type="text" formControlName="price" id="sheet-price" appCurrencyMask />
+            @if (form.controls.price.touched && form.controls.price.hasError('min')) {
+            <mat-error>Debe ser positivo</mat-error>
+            }
+        </mat-form-field>
+    </form>
+    }
+</section>

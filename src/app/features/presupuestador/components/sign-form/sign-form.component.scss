@@ -1,0 +1,65 @@
+.card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.card__title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 20px 0;
+}
+
+.card__icon {
+    font-size: 1rem;
+}
+
+.card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 20px 20px;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    &__item {
+        width: 100%;
+    }
+}
+
+.field-full {
+    width: 100%;
+}
+
+.form-error {
+    @apply text-sm text-red-400 rounded-md p-2;
+    background: rgba(248, 81, 73, 0.1);
+    border: 1px solid rgba(248, 81, 73, 0.25);
+    margin: 0;
+}
+
+.btn-add {
+    @apply w-full;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+    color: #000 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em;
+    transition: filter 0.18s, transform 0.18s;
+
+    &:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+    }
+}

@@ -1,0 +1,85 @@
+@let budget = budgetService.budget();
+
+<section class="results card">
+    <h2 class="card__title"><mat-icon class="card__icon">payments</mat-icon> Presupuesto Total</h2>
+
+    <div class="results__grid">
+        <div class="stat-card stat-card--accent">
+            <span class="stat-card__label">Total Estimado</span>
+            <span class="stat-card__val">{{ budget.total | currency:'ARS':'$':'1.0-0' }}</span>
+            <span class="stat-card__sub">{{ budgetService.signs().length }} cartel/es</span>
+        </div>
+
+        <div class="stat-card stat-card--green">
+            <span class="stat-card__label">Costo Reflectivo</span>
+            <span class="stat-card__val">{{ budget.materialCost | currency:'ARS':'$':'1.0-0' }}</span>
+            <span class="stat-card__sub">Material sobre carteles</span>
+        </div>
+
+        <div class="stat-card stat-card--blue">
+            <span class="stat-card__label">Costo Chapa Metal</span>
+            <span class="stat-card__val">{{ budget.sheetCost | currency:'ARS':'$':'1.0-0' }}</span>
+            <span class="stat-card__sub">
+                {{ budget.sheetsNeeded }} chapa/s ·
+                {{ budget.sheetCostPerM2 | currency:'ARS':'$':'1.0-0' }}/m²
+            </span>
+        </div>
+
+        <div class="stat-card stat-card--red">
+            <span class="stat-card__label">Desperdicio</span>
+            <span class="stat-card__val">{{ budget.wasteCost | currency:'ARS':'$':'1.0-0' }}</span>
+            @if (budget.sheetsNeeded > 0) {
+            <span class="waste-badge" [class.waste-badge--ok]="budget.wastePct <= 10"
+                [class.waste-badge--warn]="budget.wastePct > 10">
+                {{ budget.wastePct | number:'1.0-0' }}% de la chapa
+            </span>
+            }
+        </div>
+    </div>
+
+    @if (budget.breakdown.length > 0) {
+    <div class="breakdown">
+        <h3 class="breakdown__title">
+            <mat-icon style="font-size:14px;vertical-align:middle;">table_chart</mat-icon>
+            Desglose detallado
+        </h3>
+        <table class="breakdown__table" role="table" aria-label="Desglose de costos por cartel">
+            <thead>
+                <tr>
+                    <th scope="col">Cartel</th>
+                    <th scope="col">Dimensiones</th>
+                    <th scope="col">m²</th>
+                    <th scope="col">Chapa (proporción)</th>
+                    <th scope="col">Reflectivo</th>
+                    <th scope="col">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of budget.breakdown; track item.sign.id; let i = $index) {
+                <tr [class.breakdown__row--selected]="budgetService.selectedId() === item.sign.id">
+                    <td>#{{ i + 1 }}</td>
+                    <td>{{ item.sign.width }} × {{ item.sign.height }} m</td>
+                    <td>{{ item.area | number:'1.3-3' }}</td>
+                    <td>{{ item.sheetPortionCost | currency:'ARS':'$':'1.0-0' }}</td>
+                    <td>{{ item.materialCost | currency:'ARS':'$':'1.0-0' }}</td>
+                    <td class="subtotal">{{ (item.sheetPortionCost + item.materialCost) | currency:'ARS':'$':'1.0-0' }}
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="breakdown__total">
+                    <td colspan="3">Desperdicio ({{ budget.wastePct | number:'1.0-0' }}% de chapa)</td>
+                    <td>{{ budget.wasteCost | currency:'ARS':'$':'1.0-0' }}</td>
+                    <td>—</td>
+                    <td>{{ budget.wasteCost | currency:'ARS':'$':'1.0-0' }}</td>
+                </tr>
+                <tr class="breakdown__total breakdown__total--grand">
+                    <td colspan="5"><strong>TOTAL</strong></td>
+                    <td><strong>{{ budget.total | currency:'ARS':'$':'1.0-0' }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    }
+</section>

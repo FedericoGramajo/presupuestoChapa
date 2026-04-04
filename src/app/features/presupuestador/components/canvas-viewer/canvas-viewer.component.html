@@ -1,0 +1,27 @@
+<section class="canvas-panel card">
+    <div class="canvas-panel__header">
+        <h2 class="card__title"><mat-icon class="card__icon">grid_on</mat-icon> Visualización de Chapa</h2>
+        <span class="canvas-hint">Arrastrá los carteles · Scroll para zoom</span>
+    </div>
+
+    <div class="canvas-panel__wrapper" #wrapper>
+        <canvas #canvas (mousedown)="onMouseDown($event)" (wheel)="onWheel($event)"
+            style="cursor: default; display: block;" role="img"
+            aria-label="Representación visual de la chapa con los carteles"></canvas>
+    </div>
+
+    <div class="canvas-panel__legend" role="list" aria-label="Referencias de colores">
+        <div class="legend-item" role="listitem">
+            <span class="legend-dot" style="background:#2a4d7a;"></span> Chapa
+        </div>
+        <div class="legend-item" role="listitem">
+            <span class="legend-dot" style="background:rgba(240,165,0,.72);"></span> Seleccionado
+        </div>
+        <div class="legend-item" role="listitem">
+            <span class="legend-dot" style="background:rgba(88,166,255,.72);"></span> Cartel
+        </div>
+        <div class="legend-item" role="listitem">
+            <span class="legend-dot" style="background:rgba(248,81,73,.35);"></span> Desperdicio
+        </div>
+    </div>
+</section>

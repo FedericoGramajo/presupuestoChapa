@@ -1,0 +1,139 @@
+// Angular Material - Tema oscuro M3 (Angular Material 18+)
+@use '@angular/material' as mat;
+
+$theme: mat.define-theme((color: (theme-type: dark,
+        primary: mat.$yellow-palette,
+        tertiary: mat.$azure-palette,
+      ),
+      density: (scale: 0),
+    ));
+
+html {
+  @include mat.core();
+  @include mat.all-component-themes($theme);
+  font-family: 'Inter', sans-serif;
+}
+
+/* 1. Ocultar spinners nativos en inputs tipo number */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* 2. Custom spinners para Angular Material (matSuffix) */
+.custom-spinners {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  border-left: 1px solid var(--border);
+  margin-left: 8px;
+  height: 24px;
+
+  mat-icon {
+    font-size: 16px !important;
+    width: 16px !important;
+    height: 12px !important;
+    line-height: 12px !important;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s;
+
+    &:hover {
+      color: var(--accent);
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+// Tailwind utilities (sin preflight para no pisar Material)
+@tailwind components;
+@tailwind utilities;
+
+// ── Design Tokens ─────────────────────────────────────────────────
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #21262d;
+  --border: #30363d;
+  --accent: #f0a500;
+  --accent2: #e07b00;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --green: #3fb950;
+  --red: #f85149;
+  --blue: #58a6ff;
+  --radius: 12px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+// ── Reset Base ─────────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+// ── Sobrescrituras de Material para tema oscuro custom ─────────────
+.mat-mdc-form-field {
+  --mdc-filled-text-field-container-color: var(--bg3);
+  --mdc-outlined-text-field-input-text-color: var(--text);
+}
+
+.mat-mdc-outlined-text-field {
+  --mdc-outlined-text-field-container-shape: 8px;
+}
+
+// ── Scrollbar global ───────────────────────────────────────────────
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+// ── Animaciones ────────────────────────────────────────────────────
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.25s ease;
+}

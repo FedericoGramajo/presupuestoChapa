@@ -1,0 +1,78 @@
+<section class="card">
+    <h2 class="card__title clickable" (click)="expanded.set(!expanded())" style="cursor: pointer; user-select: none;">
+        <mat-icon class="card__icon">label</mat-icon> <span>Nuevo Cartel</span>
+        <div style="flex: 1; height: 1px; background: var(--border);"></div>
+        <mat-icon class="card__icon">{{ expanded() ? 'expand_less' : 'expand_more' }}</mat-icon>
+    </h2>
+    @if (expanded()) {
+    <form [formGroup]="form" (ngSubmit)="addSign()" class="card__body">
+        <div class="field-row">
+            <mat-form-field appearance="outline" class="field-row__item">
+                <mat-label>Ancho (m)</mat-label>
+                <input matInput type="number" formControlName="width" step="0.05" id="sign-width" />
+                <div matSuffix class="custom-spinners">
+                    <mat-icon (click)="mod('width', 0.05)">arrow_drop_up</mat-icon>
+                    <mat-icon (click)="mod('width', -0.05)">arrow_drop_down</mat-icon>
+                </div>
+                @if (form.controls.width.touched && form.controls.width.hasError('min')) {
+                <mat-error>Mín. 0.01 m</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-row__item">
+                <mat-label>Alto (m)</mat-label>
+                <input matInput type="number" formControlName="height" step="0.05" id="sign-height" />
+                <div matSuffix class="custom-spinners">
+                    <mat-icon (click)="mod('height', 0.05)">arrow_drop_up</mat-icon>
+                    <mat-icon (click)="mod('height', -0.05)">arrow_drop_down</mat-icon>
+                </div>
+                @if (form.controls.height.touched && form.controls.height.hasError('min')) {
+                <mat-error>Mín. 0.01 m</mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Tipo de lamina</mat-label>
+            <mat-select formControlName="type" id="sign-type">
+                @for (opt of signTypes; track opt.value) {
+                <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Precio lamina ($ / m²)</mat-label>
+            <span matTextPrefix>$&nbsp;</span>
+            <input matInput type="text" formControlName="reflPrice" id="sign-refl-price" appCurrencyMask />
+            @if (form.controls.reflPrice.touched && form.controls.reflPrice.hasError('min')) {
+            <mat-error>Debe ser positivo</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Cantidad de carteles</mat-label>
+            <input matInput type="number" formControlName="qty" step="1" id="sign-qty" />
+            <div matSuffix class="custom-spinners">
+                <mat-icon (click)="mod('qty', 1)">arrow_drop_up</mat-icon>
+                <mat-icon (click)="mod('qty', -1)">arrow_drop_down</mat-icon>
+            </div>
+            @if (form.controls.qty.touched && form.controls.qty.hasError('min')) {
+            <mat-error>Mínimo 1</mat-error>
+            }
+            @if (form.controls.qty.touched && form.controls.qty.hasError('max')) {
+            <mat-error>Máximo 50</mat-error>
+            }
+        </mat-form-field>
+
+        @if (error()) {
+        <p class="form-error" role="alert">⚠ {{ error() }}</p>
+        }
+
+        <button mat-flat-button color="accent" type="submit" id="btn-add-sign" class="btn-add">
+            <mat-icon>add</mat-icon>
+            Agregar Cartel
+        </button>
+    </form>
+    }
+</section>

@@ -1,0 +1,35 @@
+@if (budgetService.signs().length > 0) {
+<section class="card fade-in">
+    <h2 class="card__title clickable" (click)="expanded.set(!expanded())" style="cursor: pointer; user-select: none;">
+        <mat-icon class="card__icon">assignment</mat-icon>
+        <span>Carteles ({{ budgetService.signs().length }})</span>
+        <div style="flex: 1; height: 1px; background: var(--border);"></div>
+        <mat-icon class="card__icon">{{ expanded() ? 'expand_less' : 'expand_more' }}</mat-icon>
+    </h2>
+    @if (expanded()) {
+    <ul class="sign-list" role="list">
+        @for (sign of budgetService.signs(); track trackById($index, sign)) {
+        <li class="sign-item" [class.sign-item--selected]="budgetService.selectedId() === sign.id"
+            [style.border-left-color]="sign.color" (click)="budgetService.selectSign(sign.id)"
+            (keydown.enter)="budgetService.selectSign(sign.id)" tabindex="0" role="button"
+            [attr.aria-label]="'Cartel ' + sign.width + ' por ' + sign.height + ' metros'"
+            [attr.aria-pressed]="budgetService.selectedId() === sign.id">
+            <div class="sign-item__header">
+                <span class="sign-item__badge">Cartel #{{ $index + 1 }}</span>
+                <button class="sign-item__delete" (click)="$event.stopPropagation(); budgetService.removeSign(sign.id)"
+                    [attr.aria-label]="'Eliminar cartel ' + ($index + 1)">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            <p class="sign-item__info">📐 {{ sign.width }} × {{ sign.height }} m &nbsp;|&nbsp; {{ sign.width *
+                sign.height | number:'1.3-3' }} m²</p>
+            <p class="sign-item__info">🎨 {{ typeLabels[sign.type] }}</p>
+            <p class="sign-item__cost">
+                Material: {{ sign.width * sign.height * sign.reflPrice | currency:'ARS':'$':'1.0-0' }}
+            </p>
+        </li>
+        }
+    </ul>
+    }
+</section>
+}

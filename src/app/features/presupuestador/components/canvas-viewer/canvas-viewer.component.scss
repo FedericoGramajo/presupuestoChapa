@@ -1,0 +1,80 @@
+.canvas-panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-height: 380px;
+    overflow: hidden;
+    padding: 20px;
+
+    &__header {
+        @apply flex items-center justify-between;
+    }
+
+    &__wrapper {
+        flex: 1;
+        min-height: 320px;
+        background: repeating-linear-gradient(45deg,
+                #1a1f2e 0px, #1a1f2e 10px,
+                #14181f 10px, #14181f 20px);
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        position: relative;
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__legend {
+        @apply flex gap-4 flex-wrap;
+        font-size: 0.72rem;
+        color: var(--text-muted);
+    }
+}
+
+.canvas-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.legend-item {
+    @apply flex items-center gap-1;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    flex-shrink: 0;
+}
+
+// Reutilizar card title del diseño sistema
+.card__title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+}
+
+.card__icon {
+    font-size: 1rem;
+}
