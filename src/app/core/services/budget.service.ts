@@ -54,6 +54,15 @@ export class BudgetService {
         const newSigns: Sign[] = [];
         for (let i = 0; i < qty; i++) {
             const pos = this.#findFreeSpot(width, height, [...this.signs(), ...newSigns]);
+            if (!pos) {
+                if (newSigns.length > 0) {
+                    this.signs.update(s => [...s, ...newSigns]);
+                    this.selectedId.set(newSigns[newSigns.length - 1].id);
+                    return `No hay más espacio en la chapa original. Solo se pudieron agregar ${newSigns.length} de los ${qty} carteles solicitados.`;
+                }
+                return `No hay espacio disponible en el perímetro de la chapa para posicionar este cartel.`;
+            }
+
             newSigns.push({
                 id: this.#nextId++,
                 width, height, type, reflPrice,
@@ -82,6 +91,35 @@ export class BudgetService {
         );
     }
 
+    rotateSign(id: number): void {
+        this.signs.update(s => s.map(sg => {
+            if (sg.id !== id) return sg;
+            const sheetHeight = this.sheet().height;
+            const sheetWidth = this.sheet().width;
+            
+            let newWidth = sg.height;
+            let newHeight = sg.width;
+            
+            // Adjust to bounds if the rotated sign would stick out of the perimeter
+            let nx = sg.x;
+            let ny = sg.y;
+            if (nx + newWidth > sheetWidth) {
+                nx = Math.max(0, sheetWidth - newWidth);
+            }
+            if (ny + newHeight > sheetHeight) {
+                ny = Math.max(0, sheetHeight - newHeight);
+            }
+            
+            return {
+                ...sg,
+                width: newWidth,
+                height: newHeight,
+                x: nx,
+                y: ny
+            };
+        }));
+    }
+
     selectSign(id: number): void {
         this.selectedId.set(id);
     }
@@ -93,7 +131,7 @@ export class BudgetService {
     }
 
     // ── Privados ─────────────────────────────────────────────────────
-    #findFreeSpot(w: number, h: number, existing: Sign[]): { x: number; y: number } {
+    #findFreeSpot(w: number, h: number, existing: Sign[]): { x: number; y: number } | null {
         const sheet = this.sheet();
         const step = 0.05;
         for (let gy = 0; gy + h <= sheet.height + 0.001; gy = +(gy + step).toFixed(2)) {
@@ -101,7 +139,7 @@ export class BudgetService {
                 if (!this.#overlapsAny(gx, gy, w, h, existing)) return { x: gx, y: gy };
             }
         }
-        return { x: 0, y: 0 };
+        return null;
     }
 
     #overlapsAny(x: number, y: number, w: number, h: number, signs: Sign[]): boolean {

@@ -1,7 +1,15 @@
-<section class="canvas-panel card">
+<section class="canvas-panel card" [class.canvas-panel--fullscreen]="isFullscreen()">
     <div class="canvas-panel__header">
         <h2 class="card__title"><mat-icon class="card__icon">grid_on</mat-icon> Visualización de Chapa</h2>
-        <span class="canvas-hint">Arrastrá los carteles · Scroll para zoom</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="canvas-hint">Arrastrá los carteles · Scroll para zoom</span>
+            <button mat-icon-button (click)="isFullscreen.set(!isFullscreen())" 
+                    [matTooltip]="isFullscreen() ? 'Salir de pantalla completa (Esc)' : 'Pantalla completa'" 
+                    aria-label="Alternar pantalla completa"
+                    style="width: 32px; height: 32px; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                <mat-icon style="font-size: 20px; width: 20px; height: 20px;">{{ isFullscreen() ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+            </button>
+        </div>
     </div>
 
     <div class="canvas-panel__wrapper" #wrapper>

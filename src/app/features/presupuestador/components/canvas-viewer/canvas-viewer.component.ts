@@ -1,8 +1,10 @@
 import {
     AfterViewInit, ChangeDetectionStrategy, Component, ElementRef,
-    HostListener, inject, OnDestroy, ViewChild, effect,
+    HostListener, inject, OnDestroy, ViewChild, effect, signal
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BudgetService } from '../../../../core/services/budget.service';
 import { Sign } from '../../../../core/models/sign.model';
 import { Sheet } from '../../../../core/models/sheet.model';
@@ -11,7 +13,7 @@ import { Sheet } from '../../../../core/models/sheet.model';
     selector: 'app-canvas-viewer',
     standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatIconModule],
+    imports: [MatIconModule, MatButtonModule, MatTooltipModule],
     templateUrl: './canvas-viewer.component.html',
     styleUrl: './canvas-viewer.component.scss',
 })
@@ -20,6 +22,7 @@ export class CanvasViewerComponent implements AfterViewInit, OnDestroy {
     @ViewChild('wrapper') wrapperRef!: ElementRef<HTMLDivElement>;
 
     readonly budgetService = inject(BudgetService);
+    readonly isFullscreen = signal<boolean>(false);
 
     private ctx!: CanvasRenderingContext2D;
     private initialized = false;
@@ -475,6 +478,21 @@ export class CanvasViewerComponent implements AfterViewInit, OnDestroy {
             this.panning = false;
             this.dragSignId = null;
             this.render(); // Actualizar cursor
+        }
+    }
+
+    @HostListener('window:keydown.escape')
+    onEscape(): void {
+        if (this.isFullscreen()) {
+            this.isFullscreen.set(false);
+        }
+    }
+
+    @HostListener('window:keydown.r')
+    onRotate(): void {
+        const selectedId = this.budgetService.selectedId();
+        if (selectedId) {
+            this.budgetService.rotateSign(selectedId);
         }
     }
 

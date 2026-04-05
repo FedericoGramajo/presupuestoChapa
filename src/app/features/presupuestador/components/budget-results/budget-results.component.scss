@@ -124,6 +124,26 @@
         margin: 0 0 12px;
     }
 
+    &__table-wrapper {
+        max-height: 196px;
+        overflow-y: auto;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+    }
+
     &__table {
         width: 100%;
         border-collapse: collapse;
